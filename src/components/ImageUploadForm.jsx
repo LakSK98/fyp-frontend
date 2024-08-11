@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { useState } from 'react';
-import styled, { keyframes }  from 'styled-components';
+import { useEffect, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 
 // Styled components with dark mode
 const FormContainer = styled.div`
@@ -88,6 +88,10 @@ const LoadingOverlay = styled.div`
   z-index: 9999;
 `;
 
+const ErrorMessage = styled.h4`
+  color: red
+`;
+
 const rotate = keyframes`
   0% {
     transform: rotate(0deg);
@@ -111,6 +115,11 @@ const ImageUploadForm = ({ onUploadSuccess, setUploadedImage }) => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(()=>{
+    setErrorMsg("");
+  },[preview])
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -132,8 +141,10 @@ const ImageUploadForm = ({ onUploadSuccess, setUploadedImage }) => {
       .then(res => {
         setUploadedImage(image);
         onUploadSuccess(res.data);
+        setErrorMsg("");
       }).catch(err => {
         console.log(err);
+        setErrorMsg("Please select a valid fundus image.");
       }).finally(() => {
         setLoading(false);
       })
@@ -160,6 +171,7 @@ const ImageUploadForm = ({ onUploadSuccess, setUploadedImage }) => {
         <SubmitButton type="submit">Make a Prediction</SubmitButton>
       </form>
       {preview && <ImagePreview src={preview} alt="Image Preview" />}
+      {errorMsg != "" && <ErrorMessage>{errorMsg}</ErrorMessage>}
     </FormContainer>
   );
 };

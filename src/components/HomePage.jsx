@@ -56,12 +56,12 @@ const ReSubmitButton = styled.button`
 const HomePage = () => {
   const [responseImages, setResponseImages] = useState([]);
   const [uploadedImage, setUploadedImage] = useState();
+  const [prediction, setPrediction] = useState("");
 
   // Function to handle the response and update the state with new images
   const handleUploadSuccess = (data) => {
-    if (data.urls) {
-      setResponseImages(data.urls);
-    }
+    setPrediction(data.prediction);
+    setResponseImages(data.urls);
   };
 
   const handleUploadededImage = (file) => {
@@ -76,11 +76,15 @@ const HomePage = () => {
     <>
       <NavBar /> {/* Include the NavBar at the top */}
       <PageContainer>
-        {responseImages.length == 0 && <ImageUploadForm onUploadSuccess={handleUploadSuccess} setUploadedImage={handleUploadededImage} />}
+        {responseImages.length == 0 && <ImageUploadForm
+          onUploadSuccess={handleUploadSuccess}
+          setUploadedImage={handleUploadededImage}
+        />}
         {responseImages.length > 0 && (
           <ResponseSection>
             <h3>Input Image:</h3>
             <InputImage src={uploadedImage} />
+            <h3>Predicted Result: {prediction}</h3>
             <h3>Preprocessed Results:</h3>
             {responseImages.map((imageSrc, index) => (
               <ResponseImage key={index} src={imageSrc} alt={`Response ${index + 1}`} />
