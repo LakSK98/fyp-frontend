@@ -57,10 +57,12 @@ const HomePage = () => {
   const [responseImages, setResponseImages] = useState([]);
   const [uploadedImage, setUploadedImage] = useState();
   const [prediction, setPrediction] = useState("");
+  const [disease, setDisease] = useState("");
 
   // Function to handle the response and update the state with new images
   const handleUploadSuccess = (data) => {
     setPrediction(data.prediction);
+    setDisease(data.disease)
     setResponseImages(data.urls);
   };
 
@@ -84,8 +86,9 @@ const HomePage = () => {
           <ResponseSection>
             <h3>Input Image:</h3>
             <InputImage src={uploadedImage} />
-            <h3>Predicted Result: {prediction}</h3>
-            <h3>Preprocessed Results:</h3>
+            <h3>Predicted Main Disease: {disease}</h3>
+            <h3>Predicted Sub Type: {prediction}</h3>
+            <h4>Preprocessed Results:</h4>
             {responseImages.map((imageSrc, index) => (
               <ResponseImage key={index} src={imageSrc} alt={`Response ${index + 1}`} />
             ))}

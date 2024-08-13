@@ -117,12 +117,13 @@ const ImageUploadForm = ({ onUploadSuccess, setUploadedImage }) => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  useEffect(()=>{
+  useEffect(() => {
     setErrorMsg("");
-  },[preview])
+  }, [preview])
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    console.log(file.filename)
     setImage(file);
 
     const reader = new FileReader();
@@ -137,7 +138,7 @@ const ImageUploadForm = ({ onUploadSuccess, setUploadedImage }) => {
     setLoading(true);
     const formData = new FormData();
     formData.append('image', image);
-    axios.post('http://localhost/predict', formData)
+    axios.post('http://localhost/predict?file=2', formData)
       .then(res => {
         setUploadedImage(image);
         onUploadSuccess(res.data);
